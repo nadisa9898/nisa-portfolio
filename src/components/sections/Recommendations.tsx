@@ -9,6 +9,14 @@ import { recommendations } from "@/data/recommendations";
 
 gsap.registerPlugin(ScrollTrigger);
 
+/**
+ * The slider's keyframes ship with the component: the globals.css copy never reached the production
+ * stylesheet (nadianisa.com), so the track sat still. Inline rules can't be dropped by the CSS pipeline.
+ */
+const marqueeCss = `@keyframes pipMarq{to{transform:translate3d(-50%,0,0)}}
+.pip-marq{animation:pipMarq var(--dur,60s) linear infinite}
+@media (prefers-reduced-motion:reduce){.pip-marq{animation:none}}`;
+
 /** Seconds per card, matching the reference's 324px card pitch at 38px/s. */
 const secondsPerCard = 324 / 38;
 
@@ -65,6 +73,7 @@ export function Recommendations() {
       ref={rootRef}
       className="relative overflow-hidden bg-cream py-16 min-[640px]:py-[clamp(100px,11vw,150px)]"
     >
+      <style>{marqueeCss}</style>
       <div
         aria-hidden="true"
         className="pointer-events-none absolute inset-0 bg-[radial-gradient(rgba(23,36,76,.13)_1.6px,transparent_1.6px)] bg-[length:28px_28px] [mask-image:linear-gradient(180deg,#000,transparent_80%)]"

@@ -69,18 +69,6 @@
 @keyframes pipMarquee {
   to { transform: translateX(-50%); }
 }
-@keyframes pipMarq {
-  to { transform: translate3d(-50%, 0, 0); }
-}
-/* Endless recommendations track; --dur is set per instance, and it stands still under reduced motion. */
-.pip-marq {
-  animation: pipMarq var(--dur, 60s) linear infinite;
-}
-@media (prefers-reduced-motion: reduce) {
-  .pip-marq {
-    animation: none;
-  }
-}
 @keyframes pipPulse {
   0%, 100% { transform: scale(1); opacity: 0.6; }
   50% { transform: scale(1.08); opacity: 1; }
