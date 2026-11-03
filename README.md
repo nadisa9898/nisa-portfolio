@@ -1,36 +1,22 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Nadia Nisa — Portfolio
 
-## Getting Started
-
-First, run the development server:
+Next.js 16 (App Router) · React 19 · TypeScript · Tailwind v4 · GSAP · Lenis. Conventions: [Skills.md](Skills.md); Next.js notes: [AGENTS.md](AGENTS.md).
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+pnpm dev | build | start | lint
+npx tsc --noEmit
+npx playwright test           # e2e against `pnpm dev`
+CI_PROD=1 npx playwright test # e2e against a running `pnpm start`
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Content
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+Edit everything in `src/data/`: `site.ts` (name, email, socials, CV path, nav), `projects.ts` / `projectDetails.ts` / `caseStudies.ts`, `experience.ts`, `skills.ts`, `tools.ts`, `recommendations.ts`.
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+CV: `public/images/proj/Nadia_Nisa.pdf` (set in `site.ts`), downloaded as `Nadia_Nisa_CV.pdf`.
 
-## Learn More
+## Assets & env
 
-To learn more about Next.js, take a look at the following resources:
+Images live in `public/images`. Set `NEXT_PUBLIC_ASSET_BASE_URL` to serve them from a CDN (add the origin to `images.remotePatterns` in `next.config.ts` for `next/image`).
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+Copy `.env.example` to `.env.local`. `/api/contact` sends mail via Resend and returns 503 until `RESEND_API_KEY`, `CONTACT_FROM_EMAIL` and `CONTACT_TO_EMAIL` are set.
