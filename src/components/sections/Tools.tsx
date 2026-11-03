@@ -5,6 +5,7 @@ import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { useEffect, useRef } from "react";
 import { Star } from "@/components/ui/Star";
 import { tools } from "@/data/tools";
+import { burst } from "@/lib/fx";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -29,18 +30,29 @@ export function Tools() {
 
       const grid = root.querySelector<HTMLElement>("[data-grid]");
       if (!grid) return;
-      const gridRect = grid.getBoundingClientRect();
-      const cx = gridRect.left + gridRect.width / 2;
-      const cy = gridRect.top + gridRect.height / 2;
-      gsap.from("[data-coin]", {
-        x: (_i, el: HTMLElement) => cx - (el.getBoundingClientRect().left + el.offsetWidth / 2),
-        y: (_i, el: HTMLElement) => cy - (el.getBoundingClientRect().top + el.offsetHeight / 2),
-        scale: 0,
-        rotation: () => gsap.utils.random(-180, 180),
-        duration: 1.1,
-        ease: "back.out(1.5)",
-        stagger: 0.05,
-        scrollTrigger: { trigger: grid, start: "top 75%", once: true },
+      const coins = gsap.utils.toArray<HTMLElement>("[data-coin]", grid);
+      // Hidden until the grid scrolls in; each coin's start point is measured then, not at load, so late layout shifts can't skew the fly-in.
+      gsap.set(coins, { autoAlpha: 0 });
+      ScrollTrigger.create({
+        trigger: grid,
+        start: "top 75%",
+        once: true,
+        onEnter: () => {
+          const g = grid.getBoundingClientRect();
+          const cx = g.left + g.width / 2;
+          const cy = g.top + g.height / 2;
+          gsap.fromTo(
+            coins,
+            {
+              autoAlpha: 1,
+              scale: 0,
+              rotation: () => gsap.utils.random(-180, 180),
+              x: (_i, el: HTMLElement) => cx - (el.getBoundingClientRect().left + el.offsetWidth / 2),
+              y: (_i, el: HTMLElement) => cy - (el.getBoundingClientRect().top + el.offsetHeight / 2),
+            },
+            { x: 0, y: 0, scale: 1, rotation: 0, duration: 1.1, ease: "back.out(1.5)", stagger: 0.05, clearProps: "transform" },
+          );
+        },
       });
     }, root);
 
@@ -75,33 +87,41 @@ export function Tools() {
           className="mt-9 grid grid-cols-[repeat(auto-fit,minmax(140px,1fr))] gap-x-6 gap-y-10 min-[640px]:mt-16"
         >
           {tools.map((tool, i) => (
-            <li key={tool.name} data-coin className="flex flex-col items-center gap-3.5">
-              <div
-                tabIndex={0}
-                aria-label={`${tool.name}: ${tool.use}`}
-                data-magnetic
-                className="group relative size-[116px] [perspective:600px] outline-offset-4"
-              >
+            <li key={tool.name} data-coin className="flex flex-col items-center gap-4">
+              <div className="group relative">
                 <span
                   role="tooltip"
-                  className="pointer-events-none absolute bottom-full left-1/2 z-10 mb-2 w-[220px] -translate-x-1/2 rounded-xl bg-navy px-3 py-2 text-center font-mono text-xs text-cream opacity-0 transition-opacity group-hover:opacity-100 group-focus-visible:opacity-100"
+                  className="pointer-events-none absolute bottom-[calc(100%+6px)] left-1/2 z-[5] w-[220px] -translate-x-1/2 translate-y-2.5 scale-90 text-center opacity-0 transition-[opacity,transform] duration-[350ms] [transition-timing-function:cubic-bezier(.3,1.6,.5,1)] group-focus-within:translate-y-0 group-focus-within:scale-100 group-focus-within:opacity-100 group-hover:translate-y-0 group-hover:scale-100 group-hover:opacity-100"
                 >
-                  {tool.use}
+                  <span className="inline-block rounded-xl bg-navy px-3 py-2 font-mono text-xs leading-[1.3] text-cream">{tool.use}</span>
                 </span>
                 <div
-                  className="relative size-full animate-bob"
+                  className="animate-bob"
                   style={{ animationDuration: `${3.2 + (i % 3) * 0.6}s`, animationDelay: `${-i * 0.4}s` }}
                 >
-                  <div className="relative size-full transition-transform duration-[800ms] [transform-style:preserve-3d] [transition-timing-function:cubic-bezier(.3,1.5,.5,1)] group-hover:[transform:rotateY(180deg)] group-focus-visible:[transform:rotateY(180deg)]">
-                    <span
-                      className="absolute inset-0 grid place-items-center rounded-full border-[3px] border-navy text-[40px] font-extrabold shadow-[inset_0_-8px_0_rgba(23,36,76,.12)] [backface-visibility:hidden] [font-variation-settings:'wdth'_75]"
-                      style={{ background: tool.background }}
-                    >
-                      {tool.abbr}
-                    </span>
-                    <span className="absolute inset-0 grid [transform:rotateY(180deg)] place-items-center rounded-full border-[3px] border-navy bg-navy [backface-visibility:hidden]">
-                      <Star color="#FFD84D" className="size-11" />
-                    </span>
+                  <div
+                    tabIndex={0}
+                    aria-label={`${tool.name}: ${tool.use}`}
+                    data-magnetic
+                    data-cursor
+                    onPointerEnter={(e) => {
+                      if (e.pointerType !== "mouse") return;
+                      const r = e.currentTarget.getBoundingClientRect();
+                      burst(r.left + r.width / 2, r.top + r.height / 2, 6, 80);
+                    }}
+                    className="size-[116px] [perspective:600px] outline-offset-4 transition-transform duration-[350ms] ease-spring"
+                  >
+                    <div className="relative size-full transition-transform duration-[800ms] [transform-style:preserve-3d] [transition-timing-function:cubic-bezier(.3,1.5,.5,1)] group-focus-within:[transform:rotateY(180deg)] group-hover:[transform:rotateY(180deg)]">
+                      <span
+                        className="absolute inset-0 grid place-items-center rounded-full border-[3px] border-navy text-[40px] font-extrabold text-navy shadow-[inset_0_-8px_0_rgba(23,36,76,.12)] [backface-visibility:hidden] [font-variation-settings:'wdth'_75]"
+                        style={{ background: tool.background }}
+                      >
+                        {tool.abbr}
+                      </span>
+                      <span className="absolute inset-0 grid [transform:rotateY(180deg)] place-items-center rounded-full border-[3px] border-navy bg-navy [backface-visibility:hidden]">
+                        <Star color="#FFD84D" className="size-11" />
+                      </span>
+                    </div>
                   </div>
                 </div>
               </div>

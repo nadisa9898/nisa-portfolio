@@ -5,7 +5,6 @@ import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { Download, Eye } from "lucide-react";
 import Link from "next/link";
 import { useEffect, useRef } from "react";
-import { ContactForm } from "@/components/sections/ContactForm";
 import { Cloud } from "@/components/ui/Cloud";
 import { Mascot } from "@/components/mascot/Mascot";
 import { Star } from "@/components/ui/Star";
@@ -21,7 +20,7 @@ const links = [
 ] as const;
 
 const cvButton =
-  "inline-flex items-center gap-3 rounded-full border-2 border-navy bg-cream py-2 pr-2 pl-5 text-[17px] font-bold text-navy no-underline shadow-hard-4 transition-colors hover:bg-sky-light hover:text-navy max-[639px]:h-[50px] max-[639px]:flex-1 max-[639px]:justify-center max-[639px]:px-3 max-[639px]:text-[clamp(13px,3.9vw,16px)]";
+  "inline-flex items-center gap-3 rounded-full border-2 border-navy bg-cream py-2.5 pr-2.5 pl-6 text-[17px] font-bold text-navy no-underline shadow-hard-4 transition-colors hover:bg-sky-light hover:text-navy max-[639px]:h-[50px] max-[639px]:flex-1 max-[639px]:justify-center max-[639px]:px-2 max-[639px]:py-0 max-[639px]:text-[clamp(13px,3.9vw,16px)]";
 
 export function Contact() {
   const rootRef = useRef<HTMLElement>(null);
@@ -114,8 +113,8 @@ export function Contact() {
           </span>
         </h2>
 
-        <div className="mt-[clamp(48px,6vw,90px)] grid grid-cols-[repeat(auto-fit,minmax(min(100%,380px),1fr))] items-start gap-10">
-          <div className="relative mx-auto aspect-square w-full max-w-[440px] min-[900px]:sticky min-[900px]:top-28 min-[900px]:mt-[clamp(0px,10vw,150px)]">
+        <div className="mt-[clamp(48px,6vw,90px)] grid grid-cols-[repeat(auto-fit,minmax(min(100%,380px),1fr))] items-center gap-10">
+          <div className="relative mx-auto aspect-square w-full max-w-[440px]">
             <span aria-hidden="true" className="absolute inset-[8%] animate-[pipRing_3s_ease-out_infinite] rounded-full border-[3px] border-cream" />
             <span aria-hidden="true" className="absolute inset-[8%] animate-[pipRing_3s_ease-out_1.5s_infinite] rounded-full border-[3px] border-cream" />
             <span aria-hidden="true" className="absolute inset-[14%] rounded-full border-[3px] border-navy bg-cream shadow-hard-8" />
@@ -172,17 +171,15 @@ export function Contact() {
                   <a
                     href={link.href}
                     {...(link.external ? { target: "_blank", rel: "noopener noreferrer" } : {})}
-                    className="flex items-center gap-4 px-1 py-[15px] text-navy no-underline transition-[padding,color] hover:pl-3.5 hover:text-blue"
+                    className="flex items-center gap-x-4 gap-y-1.5 px-1 py-[15px] text-navy max-[639px]:flex-wrap no-underline transition-[padding,color] hover:pl-3.5 hover:text-blue"
                   >
                     <span className="min-w-[90px] font-mono text-xs tracking-[.14em] text-ink-muted">{link.key}</span>
-                    <span className="flex-1 text-[17px] font-bold break-all">{link.label}</span>
+                    <span className="min-w-0 flex-1 text-[17px] font-bold [overflow-wrap:anywhere] max-[639px]:basis-[calc(100%-40px)]">{link.label}</span>
                     <span aria-hidden="true">↗</span>
                   </a>
                 </li>
               ))}
             </ul>
-
-            <ContactForm />
           </div>
         </div>
       </div>

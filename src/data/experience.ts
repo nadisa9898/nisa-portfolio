@@ -34,8 +34,7 @@ export const experience: readonly ExperienceEntry[] = [
   },
   {
     role: "GIS & CAD Operator",
-    // Placeholder dates until the real ones are supplied.
-    period: "20XX — 20XX",
+    period: "OCT 2023 — DEC 2024",
     company: "Data Experts (Pvt.) Limited [datEx]",
     color: "#C9B8FF",
     description:

@@ -110,7 +110,7 @@ export function Experience() {
           <Star
             color="#FFD84D"
             stroke="#17244C"
-            className="absolute top-0 left-[22px] hidden size-[38px] -translate-x-1/2 -translate-y-1/2 animate-[pipSpin_6s_linear_infinite] min-[640px]:block min-[860px]:left-1/2"
+            className="absolute top-0 left-[22px] z-[3] hidden size-[38px] -translate-x-1/2 -translate-y-1/2 animate-[pipSpin_5s_linear_infinite] min-[640px]:block min-[860px]:left-1/2"
             style={{ top: `${progress * 100}%` }}
           />
 
@@ -121,34 +121,36 @@ export function Experience() {
                 <li
                   key={entry.role}
                   data-row
-                  className="mb-5 grid grid-cols-1 items-start gap-3.5 min-[640px]:mb-14 min-[640px]:grid-cols-[44px_1fr] min-[640px]:gap-6 min-[860px]:grid-cols-[1fr_72px_1fr]"
+                  className="mb-5 grid grid-cols-1 items-center gap-3.5 min-[640px]:mb-14 min-[640px]:grid-cols-[44px_1fr] min-[640px]:gap-6 min-[860px]:grid-cols-[1fr_72px_1fr]"
                 >
-                  <div
-                    data-emark
-                    aria-hidden="true"
-                    className="grid size-[52px] place-items-center rounded-full border-[3px] border-navy font-mono text-[13px] text-navy shadow-[0_0_0_7px_#FFFDF6] max-[639px]:order-1 min-[640px]:size-11 min-[640px]:place-self-start min-[860px]:order-2 min-[860px]:mt-[27px] min-[860px]:size-[52px] min-[860px]:justify-self-center"
-                    style={{ background: entry.color }}
-                  >
-                    0{i + 1}
+                  <div className="hidden justify-center self-start pt-6 min-[640px]:col-start-1 min-[640px]:row-start-1 min-[640px]:flex min-[860px]:col-start-2">
+                    <div
+                      data-emark
+                      aria-hidden="true"
+                      className="relative z-[2] grid size-[52px] place-items-center rounded-full border-[3px] border-navy font-mono text-[13px] text-navy shadow-[0_0_0_7px_#FFFDF6]"
+                      style={{ background: entry.color }}
+                    >
+                      0{i + 1}
+                    </div>
                   </div>
                   <article
                     data-ecard
-                    className={`rounded-[30px] border-[2.5px] border-navy bg-white p-[30px] pb-11 max-[639px]:order-2 min-[860px]:order-1 ${
+                    className={`flex flex-col gap-3 rounded-[30px] border-[2.5px] border-navy bg-white p-[30px] pb-[46px] min-[640px]:col-start-2 min-[640px]:row-start-1 ${
                       cardLeft ? "min-[860px]:col-start-1" : "min-[860px]:col-start-3"
-                    } min-[860px]:row-start-1 ${cardLeft ? "min-[860px]:order-1" : "min-[860px]:order-3"}`}
+                    }`}
                     style={{ boxShadow: `6px 6px 0 ${entry.color}` }}
                   >
                     <span
-                      className="inline-block rounded-full border-[1.5px] border-navy px-3 py-1.5 font-mono text-xs tracking-[.08em]"
+                      className="self-start rounded-full border-[1.5px] border-navy px-3 py-1.5 font-mono text-xs tracking-[.08em]"
                       style={{ background: entry.color }}
                     >
                       {entry.period}
                     </span>
-                    <h3 className="mt-4 text-[34px] leading-none font-extrabold uppercase [font-variation-settings:'wdth'_75]">
+                    <h3 className="text-[34px] leading-[.95] font-extrabold uppercase [font-variation-settings:'wdth'_75]">
                       {entry.role}
                     </h3>
-                    <p className="mt-2 text-base font-semibold text-blue">{entry.company}</p>
-                    <p className="mt-3 text-base leading-[1.55] text-ink-body">{entry.description}</p>
+                    <p className="text-base font-semibold text-blue">{entry.company}</p>
+                    <p className="text-base leading-[1.55] text-ink-body">{entry.description}</p>
                   </article>
                 </li>
               );

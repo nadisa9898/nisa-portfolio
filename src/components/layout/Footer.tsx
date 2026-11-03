@@ -1,14 +1,10 @@
 import Link from "next/link";
 import { BackToTop } from "@/components/ui/BackToTop";
+import { SocialLink } from "@/components/ui/SocialLink";
 import { TwinkleStars } from "@/components/ui/TwinkleStars";
 import { workStars } from "@/data/decor";
 import { nav, site } from "@/data/site";
-
-const socials = [
-  { label: "Email", abbr: "G", href: `mailto:${site.email}`, external: false },
-  { label: "LinkedIn", abbr: "in", href: site.socials.linkedin, external: true },
-  { label: "Behance", abbr: "Be", href: site.socials.behance, external: true },
-] as const;
+import { socialLinks } from "@/data/socials";
 
 const colLabel = "font-mono text-[11px] tracking-[.18em] text-sky uppercase";
 
@@ -48,16 +44,9 @@ export function Footer() {
           <div>
             <p className={colLabel}>Social</p>
             <ul className="mt-3 flex gap-3 max-[639px]:justify-center">
-              {socials.map((s) => (
-                <li key={s.label}>
-                  <a
-                    href={s.href}
-                    aria-label={s.label}
-                    {...(s.external ? { target: "_blank", rel: "noopener noreferrer" } : {})}
-                    className="grid box-content size-12 place-items-center rounded-full border-[1.5px] border-sky-light/50 font-mono text-[13px] text-cream no-underline transition-colors hover:border-cream hover:bg-cream hover:text-navy"
-                  >
-                    {s.abbr}
-                  </a>
+              {socialLinks.map((social) => (
+                <li key={social.label}>
+                  <SocialLink social={social} />
                 </li>
               ))}
             </ul>

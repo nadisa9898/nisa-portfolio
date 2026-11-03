@@ -19,4 +19,4 @@ CV: `public/images/proj/Nadia_Nisa.pdf` (set in `site.ts`), downloaded as `Nadia
 
 Images live in `public/images`. Set `NEXT_PUBLIC_ASSET_BASE_URL` to serve them from a CDN (add the origin to `images.remotePatterns` in `next.config.ts` for `next/image`).
 
-Copy `.env.example` to `.env.local`. `/api/contact` sends mail via Resend and returns 503 until `RESEND_API_KEY`, `CONTACT_FROM_EMAIL` and `CONTACT_TO_EMAIL` are set.
+Copy `.env.example` to `.env.local` to set the public site URL and optional asset base URL.
