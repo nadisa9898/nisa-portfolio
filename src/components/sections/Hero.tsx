@@ -94,7 +94,7 @@ export function Hero() {
         ))}
       </div>
 
-      <div className="relative mx-auto grid max-w-[1440px] grid-cols-[repeat(auto-fit,minmax(min(100%,460px),1fr))] items-center gap-6 px-[clamp(20px,5vw,72px)] pt-24 pb-7 min-[640px]:pt-[clamp(100px,13vh,135px)] min-[640px]:pb-9 min-[860px]:min-h-[min(100vh,860px)] min-[860px]:pb-10">
+      <div className="relative mx-auto grid max-w-[1440px] grid-cols-[repeat(auto-fit,minmax(min(100%,460px),1fr))] items-center gap-6 px-[clamp(20px,5vw,72px)] pt-24 pb-16 min-[640px]:pt-[clamp(100px,13vh,135px)] min-[860px]:min-h-[min(100vh,860px)] min-[860px]:pb-10">
         {/* Text column */}
         <div className="flex flex-col items-center gap-7 text-center min-[640px]:items-start min-[640px]:text-left">
           <div
@@ -130,10 +130,10 @@ export function Hero() {
 
           <div data-hfade className="flex flex-wrap justify-center gap-3.5 min-[640px]:justify-start">
             <CtaButton href="/#work" variant="solid" className="h-[62px] w-[236px]">Explore My Work</CtaButton>
-            <CtaButton href="/#about" variant="outline" className="h-[62px] w-[236px]">Get to Know Me</CtaButton>
+            <CtaButton href="/#about" variant="outline" arrow={false} className="h-[62px] w-[236px]">Get to Know Me</CtaButton>
           </div>
 
-          <p data-hfade className="font-mono text-xs tracking-[.16em] text-ink-soft">
+          <p data-hfade className="font-mono text-xs tracking-[.16em] text-balance text-ink-soft max-[639px]:tracking-[.1em]">
             CREATIVE THINKER • PROBLEM SOLVER • UI/UX DESIGNER
           </p>
         </div>

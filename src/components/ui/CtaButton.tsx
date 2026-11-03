@@ -5,6 +5,8 @@ interface CtaButtonProps {
   href: string;
   children: ReactNode;
   variant?: "solid" | "outline" | "blue";
+  /** Show the circular arrow; the label centres when it's off. */
+  arrow?: boolean;
   className?: string;
   style?: CSSProperties;
 }
@@ -24,8 +26,8 @@ const variants = {
   },
 } as const;
 
-/** Pill button with a circular arrow, shared by Hero and About. */
-export function CtaButton({ href, children, variant = "solid", className, style }: CtaButtonProps) {
+/** Pill button with an optional circular arrow, shared by Hero and About. */
+export function CtaButton({ href, children, variant = "solid", arrow = true, className, style }: CtaButtonProps) {
   const v = variants[variant];
   return (
     <Link
@@ -33,12 +35,14 @@ export function CtaButton({ href, children, variant = "solid", className, style 
       data-magnetic
       data-cursor
       style={style}
-      className={`inline-flex items-center justify-between gap-4 rounded-full py-2.5 pr-2.5 pl-6 text-[17px] font-bold no-underline transition-transform duration-300 ease-spring hover:-translate-y-0.5 ${v.box} ${className ?? ""}`}
+      className={`inline-flex items-center justify-center gap-3.5 rounded-full ${arrow ? "py-2.5 pr-2.5 pl-6" : "px-6"} text-[17px] font-bold no-underline transition-transform duration-300 ease-spring hover:-translate-y-0.5 ${v.box} ${className ?? ""}`}
     >
       {children}
-      <span aria-hidden="true" className={`grid size-10 place-items-center rounded-full text-lg ${v.circle}`}>
-        →
-      </span>
+      {arrow && (
+        <span aria-hidden="true" className={`grid size-10 place-items-center rounded-full text-lg ${v.circle}`}>
+          →
+        </span>
+      )}
     </Link>
   );
 }

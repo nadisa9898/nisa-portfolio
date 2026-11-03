@@ -42,7 +42,7 @@ Motion: `ease-spring` (hover lifts), `ease-reveal` (entrances), `animate-float|s
 
 ## 6. Buttons
 
-Use [CtaButton](src/components/ui/CtaButton.tsx) (`variant`: `solid` | `outline` | `blue`). Add variants via the `variants` object and the union type; don't fork it.
+Use [CtaButton](src/components/ui/CtaButton.tsx) (`variant`: `solid` | `outline` | `blue`; `arrow={false}` centres the label with no circle, as the Hero outline button does). Add variants via the `variants` object and the union type; don't fork it.
 
 - Links navigate (`Link`), buttons act (`<button type="button">`); icon buttons need `aria-label`, toggles need `aria-expanded`.
 - Links on colored blocks need `no-underline` and a `hover:text-*` (global `a` is blue, hover navy).
@@ -79,3 +79,37 @@ Double quotes, semicolons, 2-space indent, trailing commas. Named exports (defau
 3. Create `sections/<Section>.tsx` with `<section id="...">` and container `relative mx-auto max-w-[1440px] px-[clamp(20px,5vw,72px)]`.
 4. Add it to `page.tsx` and, if navigable, to `nav` in `site.ts`.
 5. Check mobile, tablet, desktop and reduced motion.
+
+## 13. Responsive check
+
+Run it for every UI change, and for the whole site before finishing a task. Layout is fixed by screenshots, not by reading classes.
+
+**Device matrix** (the same set as [responsive-check.mjs](scripts/responsive-check.mjs)):
+
+| Class | Viewports |
+| --- | --- |
+| Flagship phones | 360×800, 390×844 (iPhone 15), 430×932 (Pro Max / Galaxy Ultra) |
+| Modern tablets | 768×1024 (iPad mini), 820×1180 (iPad Air), 1024×1366 (iPad Pro 12.9), 1180×820 landscape |
+| Laptops / desktop | 1280×720, 1440×900, 1920×1080 |
+
+Bands the CSS targets: `<640` phone, `640–859` tablet, `≥860` desktop. Anything between the matrix widths (e.g. 600, 860, 1100) must also hold, since fluid `clamp()` sizes meet fixed ones there.
+
+**Procedure**
+
+1. Start `pnpm dev`, then run `node scripts/responsive-check.mjs [route] [deviceFilter]` (e.g. `node scripts/responsive-check.mjs /projects phone`). It scrolls the page so entrances have played, prints `ok`/`OVERFLOW` per device, and saves one PNG per section to `tests/.shots/responsive/` (`FULL=1` adds a full-page shot, needed for routes without `main > section[id]`). On Git Bash set `MSYS_NO_PATHCONV=1` so `/projects` isn't rewritten into a Windows path.
+2. `OVERFLOW` means `scrollWidth > innerWidth`, which is always a bug. Elements listed from marquees and `aria-hidden` decor are expected.
+3. Open the PNGs for at least a phone, a tablet and a laptop. Look for: clipped or overlapping text, cards or images cut by the viewport, buttons wrapping badly, tap targets under 44px, stacked order that reads wrong, and mid-word breaks in long values (emails, URLs).
+4. When a Claude Design reference exists (the project's `Portfolio.dc.html`), screenshot it at the same viewport and compare section by section; the design is the source of truth for layout, spacing and which elements show per breakpoint.
+5. Re-run after the fix and re-check the neighbouring breakpoints.
+
+**Conventions that keep layouts stable**
+
+- Mobile-first: base classes are the phone layout; add `min-[640px]:` / `min-[860px]:` for larger. Use `max-[639px]:` only for phone-only overrides.
+- Place grid children explicitly (`col-start-*` and `row-start-1`) when the layout has an empty column; auto-placement drops items into the wrong cell, as the Experience timeline markers did.
+- Let content shrink: `min-w-0` on flex/grid children, `[overflow-wrap:anywhere]` on long values, `flex-wrap` rows that stack on phones.
+- Fixed pixel widths are fine for cards and buttons only if they fit 360px; otherwise use `w-full max-w-[...]`.
+- Horizontal scrollers (marquees) sit inside `overflow-hidden` and keep the page free of horizontal scroll; `main` uses `overflow-x-clip`.
+- GSAP writes `transform` and folds in CSS `translate`/`rotate`/`scale`. Animate a wrapper, never an element that uses those properties itself (the recommendation cards' tilt and hover lift).
+- Fixed chrome (navbar, mascot buddy, dev indicator) appears over element screenshots; it is a capture artifact, not a bug.
+- A new keyframe or utility that doesn't show in `pnpm dev` may be a stale CSS chunk: save `globals.css` again or restart the server before debugging the code.
+- Don't skip reduced motion when testing: set `reducedMotion: "reduce"` once per section with an entrance animation.

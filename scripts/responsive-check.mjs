@@ -1,4 +1,4 @@
-// Usage: node scripts/responsive-check.mjs [route=/] [deviceFilter]
+// Usage: node scripts/responsive-check.mjs [route=/] [deviceFilter]   (FULL=1 adds a full-page shot; on Git Bash omit the route for "/", it gets path-converted)
 // Full-page screenshots + horizontal-overflow report for the device matrix in Skills.md §13.
 import { chromium } from "@playwright/test";
 import { mkdir } from "node:fs/promises";
@@ -16,7 +16,8 @@ const devices = [
   { name: "desktop-1920", width: 1920, height: 1080, mobile: false },
 ];
 
-const [route = "/", filter] = process.argv.slice(2);
+const [routeArg, filter] = process.argv.slice(2);
+const route = routeArg?.startsWith("/") && !routeArg.includes(":") ? routeArg : "/";
 const base = process.env.BASE_URL ?? "http://localhost:3000";
 const out = `tests/.shots/responsive`;
 await mkdir(out, { recursive: true });
@@ -49,7 +50,14 @@ for (const d of devices.filter((x) => !filter || x.name.includes(filter))) {
     return { scrollWidth: document.documentElement.scrollWidth, vw, bad: bad.slice(0, 6) };
   });
   const slug = route === "/" ? "home" : route.replace(/\W+/g, "-").replace(/^-|-$/g, "");
-  await page.screenshot({ path: `${out}/${d.name}-${slug}.png`, fullPage: true });
+  if (process.env.FULL) await page.screenshot({ path: `${out}/${d.name}-${slug}.png`, fullPage: true });
+  // One image per section keeps each capture readable when reviewed.
+  for (const el of await page.$$("main > section[id], main > [id], footer")) {
+    const id = (await el.getAttribute("id")) ?? "footer";
+    await el.scrollIntoViewIfNeeded();
+    await page.waitForTimeout(150);
+    await el.screenshot({ path: `${out}/${d.name}-${slug}-${id}.png` });
+  }
   console.log(d.name, overflow.scrollWidth > overflow.vw ? "OVERFLOW" : "ok", JSON.stringify(overflow.bad));
   await ctx.close();
 }
